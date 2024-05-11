@@ -45,6 +45,32 @@ const client = new MongoClient(uri, {
          console.log(result)
          res.send(result)
       })
+
+      // put
+     
+      app.put('/update/:id', async(req,res)=>{
+         console.log(req.params.id)
+         const id= req.params.id;
+         const query = {_id: new ObjectId(id)}
+         const updateBlogs={
+
+           $set:{
+            imageUrl:req.body.imageUrl,
+         
+            title:req.body.title,
+            catagory:req.body.catagory,
+            shortDiscription:req.body.shortDiscription,
+            lognDescription:req.body.lognDescription,
+            profile:req.body.profile,
+            
+            
+           }
+           
+         }
+         const result = await BlogsCollection.updateOne( query,updateBlogs)
+         res.send(result)
+         console.log(result)
+      })
             
     //   get-----
      app.get('/allblogs', async(req, res)=>{
