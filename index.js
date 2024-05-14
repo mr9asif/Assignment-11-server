@@ -10,7 +10,7 @@ const app = express();
 
 // middle ware
 app.use(cors({
-    origin: ['http://localhost:5173', ''], 
+    origin: ['http://localhost:5173', 'https://relaxed-strudel-f0e9a5.netlify.app'], 
     credentials: true 
   }));
 app.use(express.json());
@@ -68,7 +68,7 @@ const client = new MongoClient(uri, {
     app.post('/jwt',  async(req, res)=>{
       const user = req.body;
         console.log('user', user)
-        const token = jwt.sign(user,  process.env.ACCESS_TOKEN, {expiresIn: '1h'})
+        const token = jwt.sign(user,  process.env.ACCESS_TOKEN, {expiresIn: '365d'})
 
         res
         .cookie(' Token', token , cookieOption)
@@ -138,7 +138,7 @@ const client = new MongoClient(uri, {
       app.delete('/wish/:id', async(req, res)=>{
          const id = req.params.id;
           console.log(id)
-         const query = {_id: id};
+         const query = {_id: new ObjectId(id)};
          console.log(query)
          const result = await WishListCollection.deleteOne(query);
          console.log(result)
