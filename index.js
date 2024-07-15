@@ -10,7 +10,7 @@ const app = express();
 
 // middle ware
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://relaxed-strudel-f0e9a5.netlify.app'], 
+    origin: ['http://localhost:5173', 'https://sparkly-shortbread-513d9e.netlify.app'], 
     credentials: true 
   }));
 app.use(express.json());
@@ -63,6 +63,7 @@ const client = new MongoClient(uri, {
       const BlogsCollection = client.db('BlogsDB').collection('Blogs');
       const CommentCollection = client.db('BlogsDB').collection('Comments')
       const WishListCollection = client.db('BlogsDB').collection('wishLists')
+      const UserCollection = client.db('BlogsDB').collection('Users')
 
     //  Auth reletad
     app.post('/jwt',  async(req, res)=>{
@@ -107,6 +108,18 @@ const client = new MongoClient(uri, {
          console.log(result)
          res.send(result)
       })
+
+      app.post('/users', async(req, res)=>{
+        const user = req.body;
+        const query = {email: user.email};
+        const existing =await UserCollection.findOne(query);
+         if(existing){
+           return res.send({message: 'already user exist'})
+         }
+   
+        const result = await UserCollection.insertOne(user);
+        res.send(result)
+     })
 
       // put
      
